@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Timer</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+	
+	<style>
+		body{
+			background-color: #F24236;
+			width: 100%;
+			font-family: 'Mountains of Christmas', serif;
+			overflow: hidden;
+		}
+
+		.container{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+
+		#days{
+			font-size: 50px;
+			color: #fff;
+			text-align: center;
+		}
+
+		.drop{
+			position: absolute;
+			top: 0;
+			z-index: 1;
+			opacity: 0;
+		}
+
+		.snow{
+			height: 8px;
+			width: 8px;
+			color: #fff;
+			background-color: #fff;
+			border-radius: 100%;
+			border-color: #fff;
+			box-shadow: 0 0 10px #fff;
+		}
+
+
+		.animate{
+			animation: falling 3s infinite ease-in;
+		}
+
+
+		@keyframes falling{
+			0%{top:0; opacity: 1;}
+			100%{top: 1500px; opacity: 0;}
+		}
+
+	</style>
+
+	
+
+	<div class="container">
+		 <p id="days"> </p>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+	<script>
+		var myDate = new Date();
+		var newYear = Date.parse("Dec 31, " + myDate.getFullYear());
+		var today = Date.parse(myDate);
+		var daysToNewYear = Math.round((newYear-today)/(1000*60*60*24))
+		
+
+		if(daysToNewYear == 0){
+			document.querySelector('#days').innerHTML = 'С новым годом!!!'
+		}
+
+		if(daysToNewYear < 0){
+			document.querySelector('#days').innerHTML = `Новый год был ${-1 * daysToNewYear} дней назад`
+		}
+
+
+		if(daysToNewYear > 0){
+			document.querySelector('#days').innerHTML = `Новый год через ${daysToNewYear} дней`
+		}
+
+
+
+		snowDrop(150, randomInt(0, 1920))
+		snow(1500, 15)
+
+
+		function snow(num, speed){
+			if(num > 0){
+				setTimeout(function(){
+					$('#drop_' + randomInt(1, 250)).addClass('animate');
+					num--;
+					snow(num, speed)
+				}, speed)
+			}
+		}
+
+
+		function snowDrop(num, position){
+			if(num>0){
+				var drop = '<div class="drop snow" id="drop_' + num + '"></div>';
+
+				$('body').append(drop);
+				$('#drop_'+num).css('left', position);
+				num--;
+				snowDrop(num, randomInt(60, 1280));
+			}
+		}
+
+		function randomInt(min, max){
+			return Math.floor(Math.random() * (max-min+1) + min)
+		}
+
+
+
+	</script>
+
+</body>
+</html>
